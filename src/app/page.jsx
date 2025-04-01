@@ -1,3 +1,5 @@
-export default function Home() {
-    return "Hello worl!";
+import Homepage from "@/components/homepage";
+
+export default function App() {
+    return <Homepage />;
 }
