@@ -1,7 +1,6 @@
 :root {
     --background: #ffffff;
     --foreground: #171717;
-    font-size: 62.5%;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -11,8 +10,15 @@
     }
 }
 
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
 html,
 body {
+    font-size: 62.5%;
     height: 100vh;
     max-width: 100vw;
     overflow-x: hidden;
@@ -28,12 +34,6 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
-* {
-    box-sizing: border-box;
-    padding: 0;
-    margin: 0;
-}
-
 a {
     color: inherit;
     text-decoration: none;
@@ -45,7 +45,8 @@ a {
     }
 }
 
-@keyframes up {
+/* Animações */
+@keyframes fade-in-up {
     from {
         opacity: 0;
         transform: translateY(16px);
@@ -57,19 +58,7 @@ a {
     }
 }
 
-@keyframes down {
-    from {
-        opacity: 0;
-        transform: translateY(-100%);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-@keyframes right {
+@keyframes slide-in-left {
     from {
         transform: translateX(-100%);
     }
@@ -78,7 +67,7 @@ a {
     }
 }
 
-@keyframes appear {
+@keyframes fade-in {
     from {
         opacity: 0;
     }
@@ -87,31 +76,33 @@ a {
     }
 }
 
-.animate-up {
-    animation-name: up;
+.fade-in-up {
+    animation-name: fade-in-up;
     animation-duration: 300ms;
     animation-fill-mode: backwards;
 }
 
-.animate-main {
-    animation-name: right;
+.slide-in-left {
+    animation-name: slide-in-left;
     animation-duration: 300ms;
 }
 
-.animate-appear {
-    animation-name: appear;
+.fade-in {
+    animation-name: fade-in;
     animation-duration: 300ms;
     animation-fill-mode: backwards;
 }
 
-#page-centers {
+/* Estrutura da Página */
+#donation-page {
     width: 100%;
     height: 100%;
 
     display: flex;
 }
 
-aside {
+/* Sidebar */
+.donation-sidebar {
     width: clamp(24rem, 25vw, 35rem);
     background: linear-gradient(329.54deg, #15d675 0%, #006a4e 100%);
     padding: 3rem;
@@ -120,30 +111,49 @@ aside {
     flex-direction: column;
     justify-content: space-between;
 }
-.title {
+
+header {
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 2rem;
+}
+
+.sidebar-title {
     font-size: 3.5rem;
-    margin-bottom: 3rem;
 }
 
-.subtitle {
+.logo-image {
+    width: 10rem;
+    height: 10rem;
+}
+
+.section-subtitle {
     font-size: 2.5rem;
+    text-align: center;
 }
 
-.verse {
+.donation-verse {
     margin-top: 2rem;
     font-size: 2rem;
     margin-bottom: 6rem;
+    text-align: center;
 }
 
-aside footer p {
+.donation-image {
+    display: block;
+}
+
+.donation-sidebar footer p {
     margin-top: 0.8rem;
 }
 
-footer {
+.sidebar-footer {
     font-size: 2rem;
 }
 
-#mapID {
+#map-container {
     width: 100%;
     height: 100%;
 
@@ -152,10 +162,10 @@ footer {
 
 /* button */
 
-a.create-center {
+a.add-donation-center {
     position: absolute;
-    right: 4rem;
-    bottom: 4rem;
+    right: 2rem;
+    bottom: 2rem;
 
     z-index: 10;
 
@@ -163,7 +173,7 @@ a.create-center {
     height: 6.4rem;
     background: #15d675;
     border: 0;
-    border-radius: 2rem;
+    border-radius: 1rem;
 
     display: flex;
     justify-content: center;
@@ -172,8 +182,8 @@ a.create-center {
     transition: background-color 200ms;
 }
 
-a.create-center:hover {
-    background: #15d675;
+a.add-donation-center:hover {
+    background: #13c069;
 }
 
 body .leaflet-popup-content-wrapper {
@@ -216,36 +226,73 @@ body .leaflet-popup-content {
     z-index: 5;
 }
 
+/* Media Queries */
+
 @media (max-width: 768px) {
-    .animate-main {
-        animation-name: down;
+    .slide-in-left {
+        animation-name: fade-in-down; /* Crie um @keyframes fade-in-down se necessário */
     }
 
-    #page-centers {
+    #donation-page {
         display: flex;
         flex-direction: column;
     }
 
-    aside {
+    .donation-sidebar {
         width: 100%;
         padding: 1.5rem;
     }
 
-    .title {
+    header {
+        flex-direction: row-reverse;
+    }
+
+    .sidebar-title {
         text-align: center;
-        margin-bottom: 0rem;
-        font-size: 3rem;
+        font-size: 2.5rem;
     }
 
-    .subtitle {
+    .logo-image {
+        width: 6rem;
+        height: 6rem;
+    }
+
+    .section-subtitle {
         display: none;
     }
 
-    .verse {
+    .donation-verse {
         display: none;
     }
 
-    footer {
+    .donation-image {
         display: none;
+    }
+
+    .sidebar-footer {
+        display: none;
+    }
+}
+
+@media (max-width: 480px) {
+    header {
+        gap: 1rem;
+    }
+
+    .sidebar-title {
+        font-size: 1.8rem;
+    }
+
+    .logo-image {
+        width: 4rem;
+        height: 4rem;
+    }
+
+    a.add-donation-center {
+        right: 2rem;
+        bottom: 2rem;
+        width: 5.4rem;
+        height: 5.4rem;
+        border-radius: 1rem;
     }
 }

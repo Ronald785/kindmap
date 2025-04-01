@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import "leaflet/dist/leaflet.css";
 import Image from "next/image";
+import Link from "next/link";
 
 // Importação dinâmica do Leaflet para evitar erro no SSR
 const L = typeof window !== "undefined" ? require("leaflet") : null;
@@ -68,10 +69,13 @@ export default function Homepage() {
 
     useEffect(() => {
         if (isMounted && typeof window !== "undefined" && !mapRef.current) {
-            const mapElement = document.getElementById("mapID");
+            const mapElement = document.getElementById("map-container");
             if (!mapElement || !L) return;
 
-            const map = L.map("mapID").setView([-22.9066619, -47.0864879], 13);
+            const map = L.map("map-container").setView(
+                [-22.9066619, -47.0864879],
+                13
+            );
             mapRef.current = map;
 
             L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
@@ -141,16 +145,23 @@ export default function Homepage() {
 
     return (
         <>
-            <div id="page-centers">
-                <aside className="animate-main">
+            <div id="donation-page">
+                <aside className="donation-sidebar animate-main">
                     <header>
-                        <h1 className="title">Kindmap</h1>
+                        <h1 className="sidebar-title">Kindmap</h1>
+                        <Image
+                            src={"/logo.svg"}
+                            width={50}
+                            height={50}
+                            alt="Logo Kindmap"
+                            className="logo-image"
+                        />
                     </header>
                     <main>
-                        <h2 className="subtitle">
+                        <h2 className="section-subtitle">
                             Encontre um centro de doação próximo
                         </h2>
-                        <p className="verse">
+                        <p className="donation-verse">
                             Mais bem-aventurado é dar do que recebe
                         </p>
                         <Image
@@ -158,9 +169,10 @@ export default function Homepage() {
                             width={200}
                             height={200}
                             alt="Doação"
+                            className="donation-image"
                         />
                     </main>
-                    <footer>
+                    <footer className="sidebar-footer">
                         {userLocation.lat && userLocation.lng ? (
                             <>
                                 Latitude: {userLocation.lat.toFixed(4)}
@@ -173,11 +185,11 @@ export default function Homepage() {
                     </footer>
                 </aside>
 
-                <div id="mapID" className="animate-appear"></div>
+                <div id="map-container" className="animate-appear"></div>
 
-                {/* <a
+                {/* <Link
                     href="/"
-                    className="create-center"
+                    className="add-donation-center"
                     title="Cadastrar um centro"
                 >
                     <Image
@@ -186,7 +198,7 @@ export default function Homepage() {
                         height={25}
                         alt="Criar centro"
                     />
-                </a> */}
+                </Link> */}
             </div>
         </>
     );
